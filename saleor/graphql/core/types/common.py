@@ -30,6 +30,7 @@ from ..descriptions import (
     ADDED_IN_312,
     ADDED_IN_314,
     DEPRECATED_IN_3X_FIELD,
+    PREVIEW_FEATURE,
 )
 from ..enums import (
     AccountErrorCode,
@@ -44,6 +45,7 @@ from ..enums import (
     ExternalNotificationTriggerErrorCode,
     GiftCardErrorCode,
     GiftCardSettingsErrorCode,
+    IconThumbnailFormatEnum,
     InvoiceErrorCode,
     JobStatusEnum,
     LanguageCodeEnum,
@@ -164,7 +166,7 @@ class BulkError(BaseObjectType):
 
 class AccountError(Error):
     code = AccountErrorCode(description="The error code.", required=True)
-    address_type = AddressTypeEnum(  # type: ignore[has-type]
+    address_type = AddressTypeEnum(
         description="A type of address that causes the error.", required=False
     )
 
@@ -242,7 +244,7 @@ class CheckoutError(Error):
         description="List of line Ids which cause the error.",
         required=False,
     )
-    address_type = AddressTypeEnum(  # type: ignore[has-type]
+    address_type = AddressTypeEnum(
         description="A type of address that causes the error.", required=False
     )
 
@@ -330,7 +332,7 @@ class OrderError(Error):
         description="List of product variants that are associated with the error",
         required=False,
     )
-    address_type = AddressTypeEnum(  # type: ignore[has-type]
+    address_type = AddressTypeEnum(
         description="A type of address that causes the error.", required=False
     )
 
@@ -821,6 +823,16 @@ class ThumbnailField(graphene.Field):
         kwargs["size"] = self.size
         kwargs["format"] = self.format
         super().__init__(of_type, *args, **kwargs)
+
+
+class IconThumbnailField(ThumbnailField):
+    format = IconThumbnailFormatEnum(
+        default_value="ORIGINAL",
+        description=(
+            "The format of the image. When not provided, format of the original "
+            "image will be used." + ADDED_IN_314 + PREVIEW_FEATURE
+        ),
+    )
 
 
 class MediaInput(graphene.InputObjectType):
