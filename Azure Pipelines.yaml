@@ -1,0 +1,18 @@
+---
+pool:
+  vmImage: ubuntu-22.04
+trigger:
+  - main
+steps:
+  - task: Docker@2
+    inputs:
+      command: 'build'
+      Dockerfile: './Dockerfile'
+      repository: 'shivakrishna99/saleor'
+      tags: "latest"
+  - task: Docker@2
+    inputs:
+      command: 'push'
+      repository: 'shivakrishna99/saleor'
+      tags: "latest"
+      containerRegistry: 'Docker-Hub-Connection'
